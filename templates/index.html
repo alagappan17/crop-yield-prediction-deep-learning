@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+
+<head>
+    <meta charset="UTF-8">
+    <title>ML API</title>
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> -->
+
+</head>
+
+<body>
+    <div class="login">
+        <h1>Predict Salary Analysis</h1>
+        <!-- crops = ["Rice","Sugarcane","Sunflower","Minor Pulses","Groundnut"]
+        options = ["Chengalpattu","Madurai","Thanjavaur","Tiruchirappalli"] -->
+        <!-- Main Input For Receiving Query to our ML -->
+        <form action="{{ url_for('predict')}}" method="post">
+            <label for="district">District</label>
+            <select name="district" id="district">
+                <option value="Chengalpattu">Chengalpattu</option>
+                <option value="Madurai">Madurai</option>
+                <option value="Thanjavaur">Thanjavaur</option>
+                <option value="Tiruchirappalli">Tiruchirappalli</option>
+            </select>
+            <label for="crop">Crop</label>
+            <select name="crop" id="crop">
+                <option value="Rice">Rice</option>
+                <option value="Sugarcane">Sugarcane</option>
+                <option value="Sunflower">Sunflower</option>
+                <option value="Minor Pulses">Minor Pulses</option>
+                <option value="Groundnut">Groundnut</option>
+            </select>
+            <input type="text" name="avgtemp" placeholder="Average Temperature" required="required">
+            <input type="text" name="prec" placeholder="Precipitation" required="required">
+            <input type="text" name="slp" placeholder="Sea Level Pressure" required="required">
+            <input type="text" name="wind" placeholder="Wind" required="required">
+            <input type="text" name="area" placeholder="Area" required="required">
+            <input type="text" name="nc" placeholder="Nitrogen Consumption" required="required">
+            <input type="text" name="ns" placeholder="Nitrogen Share in NPK" required="required">
+            <input type="text" name="pc" placeholder="Phosphate Consumption" required="required">
+            <input type="text" name="ps" placeholder="Phosphate Share in NPK" required="required">
+            <input type="text" name="kc" placeholder="Potash Consumption" required="required">
+            <input type="text" name="ks" placeholder="Potash Share in NPK" required="required">
+            <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+        </form>
+
+        <br>
+        <br>
+        {{ prediction_text }}
+    </div>
+
+
+</body>
+
+</html>
