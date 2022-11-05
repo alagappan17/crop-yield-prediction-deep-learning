@@ -46,10 +46,8 @@ def runModel(userData):
     X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
     X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
     user_x = user_data_df.values
-    # print("Before: ", user_x)
     user_x = PredictorScalerFit.transform(user_x)
     user_x = np.reshape(user_x, (user_x.shape[0], user_x.shape[1], 1))
-    # print("After: ", user_x)
     regressor = Sequential()
     regressor.add(Conv1D(32, 2, activation="relu",
                          input_shape=(X_train.shape[1], 1)))
@@ -68,10 +66,7 @@ def runModel(userData):
     history = regressor.fit(X_train, y_train, validation_data=(
         X_test, y_test), epochs=60, batch_size=1)
     y_pred = regressor.predict(user_x)
-    # print(user_x)
     y_pred = TargetVarScalerFit.inverse_transform(y_pred)
     result = int(y_pred[0])
     print(y_pred)
     return y_pred
-
-# regressor.save('CNNLSTM.h5')
