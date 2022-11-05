@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>ML API</title>
+    <title>Crop Yield Prediction</title>
     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
@@ -27,14 +27,14 @@
                 <option value="Thanjavaur">Thanjavaur</option>
                 <option value="Tiruchirappalli">Tiruchirappalli</option>
             </select>
-            <label for="crop">Crop</label>
-            <select name="crop" id="crop">
+            <!-- <label for="crop">Crop</label> -->
+            <!-- <select name="crop" id="crop">
                 <option value="Rice">Rice</option>
                 <option value="Sugarcane">Sugarcane</option>
                 <option value="Sunflower">Sunflower</option>
                 <option value="Minor Pulses">Minor Pulses</option>
                 <option value="Groundnut">Groundnut</option>
-            </select>
+            </select> -->
             <input type="text" name="avgtemp" placeholder="Average Temperature" required="required">
             <input type="text" name="prec" placeholder="Precipitation" required="required">
             <input type="text" name="slp" placeholder="Sea Level Pressure" required="required">
@@ -48,10 +48,14 @@
             <input type="text" name="ks" placeholder="Potash Share in NPK" required="required">
             <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
         </form>
-
         <br>
         <br>
         {{ prediction_text }}
+        <br>
+        <br>
+        {{ cropName }}
+        <br>
+        {{ cropYield }}
     </div>
 
 

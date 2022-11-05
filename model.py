@@ -12,9 +12,6 @@ from tensorflow.keras.layers import Dropout
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import Conv1D
 
-# usr_data = ['Thanjavaur', 'Rice', '30.77', '1309.8', '2.68', '13.35',
-#             '3711.06', '36821', '46.5', '20576', '25.98', '21788', '27.52']
-
 
 def runModel(userData):
     usr_data = userData
@@ -49,10 +46,10 @@ def runModel(userData):
     X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
     X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
     user_x = user_data_df.values
-    print("Before: ", user_x)
+    # print("Before: ", user_x)
     user_x = PredictorScalerFit.transform(user_x)
     user_x = np.reshape(user_x, (user_x.shape[0], user_x.shape[1], 1))
-    print("After: ", user_x)
+    # print("After: ", user_x)
     regressor = Sequential()
     regressor.add(Conv1D(32, 2, activation="relu",
                          input_shape=(X_train.shape[1], 1)))

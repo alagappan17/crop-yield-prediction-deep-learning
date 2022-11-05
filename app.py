@@ -33,6 +33,7 @@ def predict():
     # print(request.form.get("district"))
     # print(request.form.get("avgtemp"))
     features = [str(x) for x in request.form.values()]
+    features.insert(1, "")
     # features = [np.array(features)]
 
     # for x in request.form.values():
@@ -40,14 +41,29 @@ def predict():
     # features1 = [int(x) for x in request.form.values()]
     # features = np.concatenate((features, features1))
     # features = [np.array(features)]
-    print(features)
     # prediction = model.predict(final_features)
     from model import runModel
-    prediction = runModel(features)
 
+    crops = ["Rice", "Sugarcane", "Sunflower", "Minor Pulses", "Groundnut"]
+    # crops = ["Rice", "Sugarcane"]
+    # crops = ["Rice"]
+    predictedOutput = []
+    bestCrop = ""
+    bestYield = -999999999999
+
+    for crop in crops:
+        features[1] = crop
+        prediction = runModel(features)
+        predictedOutput.append(prediction)
+        if (prediction > bestYield):
+            bestYield = prediction
+            bestCrop = crop
+
+    text = "The best crop for " + str(features[0]) + " District is " + str(
+        bestCrop) + " with a yield of " + str(bestYield)[2:-2] + "Kg/ha"
     # output = round(prediction[0], 2)
-
-    return render_template('index.html', prediction_text='Crop Yield is {} Kg/ha'.format(float(prediction)))
+    return render_template('index.html', prediction_text=text, cropYield=predictedOutput, cropName=crops, length=len(crops))
+    # return render_template('index.html', prediction_text=text)
 
 
 if __name__ == "__main__":
