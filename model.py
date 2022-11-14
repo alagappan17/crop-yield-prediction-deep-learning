@@ -64,7 +64,7 @@ def runModel(userData):
     regressor.compile(loss='mean_squared_error',
                       optimizer='adam', metrics=['mae', 'mse'])
     history = regressor.fit(X_train, y_train, validation_data=(
-        X_test, y_test), epochs=60, batch_size=1)
+        X_test, y_test), epochs=10, batch_size=1)
     y_pred = regressor.predict(user_x)
     y_pred = TargetVarScalerFit.inverse_transform(y_pred)
     result = int(y_pred[0])

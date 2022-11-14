@@ -1,53 +1,126 @@
 <!DOCTYPE html>
-<html>
-<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Crop Yield Prediction</title>
-    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> -->
-
+   <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+   <link rel="stylesheet" href="/static/css/style.css">
+   <link rel="stylesheet" href="/static/css/responsive.css">
+   <link rel="icon" href="images/fevicon.png" type="image/gif" />
+   <link rel="stylesheet" href="/static/css/jquery.mCustomScrollbar.min.css">
+   <link rel="stylesheet" href="/static/css/jquery.min.js">
+   <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css"
+      media="screen">
 </head>
 
-<body>
-    <div class="login">
-        <h1>Predict Salary Analysis</h1>
-        <form action="{{ url_for('predict')}}" method="post">
-            <label for="district">District</label>
-            <select name="district" id="district">
-                <option value="Chengalpattu">Chengalpattu</option>
-                <option value="Madurai">Madurai</option>
-                <option value="Thanjavaur">Thanjavaur</option>
-                <option value="Tiruchirappalli">Tiruchirappalli</option>
-            </select>
-            <input type="text" name="avgtemp" placeholder="Average Temperature" required="required">
-            <input type="text" name="prec" placeholder="Precipitation" required="required">
-            <input type="text" name="slp" placeholder="Sea Level Pressure" required="required">
-            <input type="text" name="wind" placeholder="Wind" required="required">
-            <input type="text" name="area" placeholder="Area" required="required">
-            <input type="text" name="nc" placeholder="Nitrogen Consumption" required="required">
-            <input type="text" name="ns" placeholder="Nitrogen Share in NPK" required="required">
-            <input type="text" name="pc" placeholder="Phosphate Consumption" required="required">
-            <input type="text" name="ps" placeholder="Phosphate Share in NPK" required="required">
-            <input type="text" name="kc" placeholder="Potash Consumption" required="required">
-            <input type="text" name="ks" placeholder="Potash Share in NPK" required="required">
-            <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
-        </form>
-        <br>
-        <br>
-        {{ prediction_text }}
-        <br>
-        <br>
-        {{ cropName }}
-        <br>
-        {{ cropYield }}
-    </div>
-
-
+<body class="main-layout">
+   <section class="banner_main">
+      <div style="margin-bottom:800px; margin-top:200px; text-align:center">
+         <h1 style="letter-spacing:0;  color:white; font-size:80px">TAMIL NADU CROP PREDICTION </h1>
+         <br>
+         <h3 style="letter-spacing:0;color:white; font-size:20px">THE ONLY PLACE YOU CAN GET A PERFECT AND ACCURATE
+            RESULT!</h3>
+         <br><br>
+         <a href="#main">
+            <img alt="" src="/static/images/down.png" width=150" height="70">
+         </a>
+      </div>
+      <div id="banner1" data-ride="carousel">
+         <div class="container">
+            <div class="carousel-caption">
+               <div class="text-bg">
+                  <div id="main" class="login">
+                     <h1 style="letter-spacing: 0;">Best crop prediction analysis</h1>
+                     <form action="{{ url_for('predict')}}" method="post">
+                        <table class="table table-borderless table-responsive">
+                           <tr>
+                              <td align="right"><label for="district">District : </label></td>
+                              <td><select name="district" id="district" style="width: 125%;">
+                                    <option value="" disabled selected hidden>Select the district
+                                    </option>
+                                    <option value="Chengalpattu">Chengalpattu</option>
+                                    <option value="Madurai">Madurai</option>
+                                    <option value="Thanjavaur">Thanjavaur</option>
+                                    <option value="Tiruchirappalli">Tiruchirappalli</option>
+                                 </select></td>
+                           </tr>
+                           <tr>
+                              <td align="right"><label for="avgtemp">Average Temperature : </label>
+                              </td>
+                              <td> <input type="text" name="avgtemp" placeholder="Average Temperature"
+                                    required="required"></td>
+                           </tr>
+                           <tr>
+                              <td align="right"><label for="prec">Precipitation : </label> </td>
+                              <td><input type="text" name="prec" placeholder="Precipitation" required="required">
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="right"><label for="slp">Sea level pressure : </label>
+                              </td>
+                              <td><input type="text" name="slp" placeholder="Sea Level Pressure" required="required">
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="right"><label for="wind">Wind : </label> </td>
+                              <td><input type="text" name="wind" placeholder="Wind" required="required">
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="right"><label for="area">Area : </label> </td>
+                              <td><input type="text" name="area" placeholder="Area" required="required">
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="right"><label for="nc">Nitrogen Consumption : </label>
+                              </td>
+                              <td> <input type="text" name="nc" placeholder="Nitrogen Consumption" required="required">
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="right"><label for="ns">Nitrogen Share in NPK : </label>
+                              </td>
+                              <td> <input type="text" name="ns" placeholder="Nitrogen Share in NPK" required="required">
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="right"><label for="pc">Phosphate Consumption: </label>
+                              </td>
+                              <td><input type="text" name="pc" placeholder="Phosphate Consumption" required="required">
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="right"><label for="ps">Phosphate Share in NPK: </label>
+                              </td>
+                              <td> <input type="text" name="ps" placeholder="Phosphate Share in NPK"
+                                    required="required"></td>
+                           </tr>
+                           <tr>
+                              <td align="right"><label for="kc">Potash Consumption : </label> </td>
+                              <td> <input type="text" name="kc" placeholder="Potash Consumption" required="required">
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="right"><label for="ks">Potash Share in NPK : </label>
+                              </td>
+                              <td><input type="text" name="ks" placeholder="Potash Share in NPK" required="required">
+                              </td>
+                           </tr>
+                           <tr>
+                              <td></td>
+                              <td> <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+                              </td>
+                           </tr>
+                        </table>
+                     </form>
+                     <br>
+                     <br>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
 </body>
 
 </html>
