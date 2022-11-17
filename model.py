@@ -6,6 +6,9 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_absolute_error
+import math
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM
 from tensorflow.keras.layers import Dropout
@@ -66,10 +69,24 @@ def CNNStackedLstm(userData):
                       optimizer='adam', metrics=['mae', 'mse'])
     history = regressor.fit(X_train, y_train, validation_data=(
         X_test, y_test), epochs=60, batch_size=1)
+    pred = regressor.predict(X_test)
     y_pred = regressor.predict(user_x)
     y_pred = TargetVarScalerFit.inverse_transform(y_pred)
     result = int(y_pred[0])
-    print(y_pred)
+    MSE = mean_squared_error(y_test, pred)
+    MAE = mean_absolute_error(y_test, pred)
+    RMSE = math.sqrt(MSE)
+    print("\n\n\n\nMean Square Error CNN Stacked LSTM:\n")
+    print(MSE)
+    print("\nRoot Mean Square Error CNN Stacked LSTM:\n")
+    print(RMSE)
+    print("\nMean Absolute Error CNN Stacked LSTM:\n")
+    print(MAE)
+    # evalMet = []
+    # evalMet.append(MSE)
+    # evalMet.append(RMSE)
+    # evalMet.append(MAE)
+    # print(evalMet)
     return y_pred
 
 
@@ -124,7 +141,7 @@ def StackedLstmCNN(userData):
               input_shape=(X_train.shape[1], 1)))
     model.add(Dense(1))
     model.compile(loss='mean_squared_error', optimizer='adam',
-                  metrics=['mae', 'accuracy'])
+                  metrics=['mae', 'mse'])
     history = model.fit(X_train, y_train, validation_data=(
         X_test, y_test), epochs=60, batch_size=1)
     y_pred = model.predict(user_x)
