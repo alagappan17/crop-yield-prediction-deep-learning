@@ -64,9 +64,66 @@ def runModel(userData):
     regressor.compile(loss='mean_squared_error',
                       optimizer='adam', metrics=['mae', 'mse'])
     history = regressor.fit(X_train, y_train, validation_data=(
-        X_test, y_test), epochs=10, batch_size=1)
+        X_test, y_test), epochs=60, batch_size=1)
     y_pred = regressor.predict(user_x)
     y_pred = TargetVarScalerFit.inverse_transform(y_pred)
     result = int(y_pred[0])
+    print(y_pred)
+    return y_pred
+
+
+def runModel2(userData):
+    usr_data = userData
+    print("Params: ", userData)
+    data = pd.read_excel(r'Final_Dataset.xlsx')
+    data = data.loc[(data['District'] == usr_data[0])
+                    & (data['Crop'] == usr_data[1])]
+    predictors = ['District', 'Crop', 'Average_Temperature', 'Precipitation', 'Sea_Level_Pressure', 'Wind', 'Area', 'Nitrogen_Consumption',
+                  'Nitrogen_Share_in_NPK', 'Phosphate_Consumption', 'Phosphate_Share_in_NPK', 'Potash_Consumption', 'Potash_Share_in_NPK']
+    target = ['Yield']
+    y = pd.DataFrame(data[target].values)
+    X = pd.DataFrame(data[predictors].values)
+
+    X.loc[len(data.index)] = usr_data
+    labelencoder_X_1 = LabelEncoder()
+    X.loc[:, 0] = labelencoder_X_1.fit_transform(X.iloc[:, 0])
+    X.loc[:, 1] = labelencoder_X_1.fit_transform(X.iloc[:, 1])
+    user_data_df = X.iloc[[len(X.index)-1]]
+    X = X.drop(len(X.index)-1)
+    X = X.values
+    y = y.values
+    sc = StandardScaler()
+    sc1 = StandardScaler()
+    PredictorScalerFit = sc.fit(X)
+    TargetVarScalerFit = sc1.fit(y)
+    X = PredictorScalerFit.transform(X)
+    y = TargetVarScalerFit.transform(y)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=0)
+    X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
+    X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
+    user_x = user_data_df.values
+    user_x = PredictorScalerFit.transform(user_x)
+    user_x = np.reshape(user_x, (user_x.shape[0], user_x.shape[1], 1))
+    model = Sequential()
+#     model.add(Conv1D(32, 2, activation="relu", input_shape=(X_train.shape[1], 1)))
+    model.add(LSTM(units=45, return_sequences=True,
+              input_shape=(X_train.shape[1], 1)))
+    model.add(Dropout(0.2))
+    model.add(LSTM(units=45, return_sequences=True))
+    model.add(Dropout(0.2))
+    model.add(LSTM(units=45, return_sequences=True))
+    model.add(Dropout(0.2))
+    #model.add(LSTM(units = 45))
+    # model.add(Dropout(0.2))
+    model.add(Conv1D(32, 2, activation="relu",
+              input_shape=(X_train.shape[1], 1)))
+    model.add(Dense(1))
+    model.compile(loss='mean_squared_error', optimizer='adam',
+                  metrics=['mae', 'accuracy'])
+    history = model.fit(X_train, y_train, validation_data=(
+        X_test, y_test), epochs=60, batch_size=1)
+    y_pred = model.predict(user_x)
+    y_pred = TargetVarScalerFit.inverse_transform(y_pred[0])
     print(y_pred)
     return y_pred
