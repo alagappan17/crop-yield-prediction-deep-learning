@@ -22,7 +22,7 @@ def predict():
     features = [str(x) for x in request.form.values()]
     features.insert(1, "")
 
-    from model import CNNStackedLstm, StackedLstmCNN
+    from model import CNNStackedLSTM, CNNBiLSTM
 
     crops = ["Rice", "Sugarcane", "Sunflower", "Minor Pulses", "Groundnut"]
     predictedOutput1 = []
@@ -33,7 +33,7 @@ def predict():
         bestYield = -999999999
         for crop in crops:
             features[1] = crop
-            prediction = CNNStackedLstm(features)
+            prediction = CNNStackedLSTM(features)
             predictedOutput1.append(prediction)
             if (prediction > bestYield):
                 bestYield = prediction
@@ -42,7 +42,7 @@ def predict():
     def model2(crops):
         for crop in crops:
             features[1] = crop
-            prediction1 = StackedLstmCNN(features)
+            prediction1 = CNNBiLSTM(features)
             predictedOutput2.append(prediction1)
 
     th1 = threading.Thread(target=model1, args=(crops, ))

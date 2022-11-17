@@ -15,9 +15,13 @@ from tensorflow.keras.layers import Dropout
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import Conv1D
 from tensorflow.keras.layers import Flatten
+from tensorflow.keras.layers import TimeDistributed
+from tensorflow.keras.layers import Flatten
+from tensorflow.keras.layers import Bidirectional
+from tensorflow.keras.layers import MaxPooling2D
 
 
-def CNNStackedLstm(userData):
+def CNNStackedLSTM(userData):
     usr_data = userData
     print("Params: ", userData)
     data = pd.read_excel(r'Final_Dataset.xlsx')
@@ -82,17 +86,14 @@ def CNNStackedLstm(userData):
     print(RMSE)
     print("\nMean Absolute Error CNN Stacked LSTM:\n")
     print(MAE)
-    # evalMet = []
-    # evalMet.append(MSE)
-    # evalMet.append(RMSE)
-    # evalMet.append(MAE)
-    # print(evalMet)
     return y_pred
 
 
-def StackedLstmCNN(userData):
+def CNNBiLSTM(userData):
     usr_data = userData
     print("Params: ", userData)
+    import numpy as np
+    import pandas as pd
     data = pd.read_excel(r'Final_Dataset.xlsx')
     data = data.loc[(data['District'] == usr_data[0])
                     & (data['Crop'] == usr_data[1])]
@@ -101,9 +102,7 @@ def StackedLstmCNN(userData):
     target = ['Yield']
     y = pd.DataFrame(data[target].values)
     X = pd.DataFrame(data[predictors].values)
-
     X.loc[len(data.index)] = usr_data
-    from sklearn.preprocessing import LabelEncoder
     labelencoder_X_1 = LabelEncoder()
     X.loc[:, 0] = labelencoder_X_1.fit_transform(X.iloc[:, 0])
     X.loc[:, 1] = labelencoder_X_1.fit_transform(X.iloc[:, 1])
@@ -111,14 +110,12 @@ def StackedLstmCNN(userData):
     X = X.drop(len(X.index)-1)
     X = X.values
     y = y.values
-    from sklearn.preprocessing import StandardScaler
     sc = StandardScaler()
     sc1 = StandardScaler()
     PredictorScalerFit = sc.fit(X)
     TargetVarScalerFit = sc1.fit(y)
     X = PredictorScalerFit.transform(X)
     y = TargetVarScalerFit.transform(y)
-    from sklearn.model_selection import train_test_split
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=0)
     X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
@@ -126,26 +123,32 @@ def StackedLstmCNN(userData):
     user_x = user_data_df.values
     user_x = PredictorScalerFit.transform(user_x)
     user_x = np.reshape(user_x, (user_x.shape[0], user_x.shape[1], 1))
-    model = Sequential()
-#     model.add(Conv1D(32, 2, activation="relu", input_shape=(X_train.shape[1], 1)))
-    model.add(LSTM(units=45, return_sequences=True,
-              input_shape=(X_train.shape[1], 1)))
-    model.add(Dropout(0.2))
-    model.add(LSTM(units=45, return_sequences=True))
-    model.add(Dropout(0.2))
-    model.add(LSTM(units=45, return_sequences=True))
-    model.add(Dropout(0.2))
-    #model.add(LSTM(units = 45))
-    # model.add(Dropout(0.2))
-    model.add(Conv1D(32, 2, activation="relu",
-              input_shape=(X_train.shape[1], 1)))
-    model.add(Dense(1))
-    model.compile(loss='mean_squared_error', optimizer='adam',
-                  metrics=['mae', 'mse'])
-    history = model.fit(X_train, y_train, validation_data=(
+    modell = Sequential()
+    modell.add(Conv1D(32, 2, activation="relu",
+               input_shape=(X_train.shape[1], 1)))
+    modell.add(Bidirectional(
+        LSTM(100, activation='relu', input_shape=(100, 1))))  # elu
+    #modell.add(Bidirectional(LSTM(50, dropout=0.5)))
+    #modell.add(Bidirectional(LSTM(100, dropout=0.5)))
+    # modell.add(BatchNormalization(momentum=0.6))
+    modell.add(Dense(1))
+    modell.compile(loss='mean_squared_error',
+                   optimizer='adam', metrics=['mae', 'mse'])
+    history = modell.fit(X_train, y_train, validation_data=(
         X_test, y_test), epochs=60, batch_size=1)
-    y_pred = model.predict(user_x)
-    y_pred = TargetVarScalerFit.inverse_transform(y_pred[0])
-    result = float(y_pred[0])
-    print(result)
-    return result
+    y_pred = modell.predict(user_x)
+    pred = modell.predict(X_test)
+    y_pred = TargetVarScalerFit.inverse_transform(y_pred)
+    result = int(y_pred[0])
+    print(y_test)
+    print(pred)
+    MSE = mean_squared_error(y_test, pred)
+    MAE = mean_absolute_error(y_test, pred)
+    RMSE = math.sqrt(MSE)
+    print("\n\n\n\nMean Square Error CNN Bi LSTM:\n")
+    print(MSE)
+    print("\nRoot Mean Square Error CNN Bi LSTM:\n")
+    print(RMSE)
+    print("\nMean Absolute Error CNN Bi LSTM:\n")
+    print(MAE)
+    return y_pred

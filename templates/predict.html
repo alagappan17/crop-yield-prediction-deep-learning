@@ -30,8 +30,8 @@
                                  <th>
                                     <tr style="color: white; ">
                                        <td>CROP</td>
-                                       <td>PREDICTED YIELD for CNN Stacked LSTM</td>
-                                       <td>PREDICTED YIELD for Stacked LSTM CNN</td>
+                                       <td>PREDICTED YIELD by CNN Stacked LSTM</td>
+                                       <td>PREDICTED YIELD by CNN Bi LSTM</td>
 
                                     </tr>
                                  </th>
@@ -43,7 +43,7 @@
                                  <tr>
                                     <td>{{cropName[i]}}</td>
                                     <td>{{cropYield1[i][0][0]}}</td>
-                                    <td>{{cropYield2[i]}}</td>
+                                    <td>{{cropYield2[i][0][0]}}</td>
                                     {%endfor%}
 
                                  </tr>
