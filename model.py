@@ -11,9 +11,10 @@ from tensorflow.keras.layers import LSTM
 from tensorflow.keras.layers import Dropout
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import Conv1D
+from tensorflow.keras.layers import Flatten
 
 
-def runModel(userData):
+def CNNStackedLstm(userData):
     usr_data = userData
     print("Params: ", userData)
     data = pd.read_excel(r'Final_Dataset.xlsx')
@@ -72,7 +73,7 @@ def runModel(userData):
     return y_pred
 
 
-def runModel2(userData):
+def StackedLstmCNN(userData):
     usr_data = userData
     print("Params: ", userData)
     data = pd.read_excel(r'Final_Dataset.xlsx')
@@ -85,6 +86,7 @@ def runModel2(userData):
     X = pd.DataFrame(data[predictors].values)
 
     X.loc[len(data.index)] = usr_data
+    from sklearn.preprocessing import LabelEncoder
     labelencoder_X_1 = LabelEncoder()
     X.loc[:, 0] = labelencoder_X_1.fit_transform(X.iloc[:, 0])
     X.loc[:, 1] = labelencoder_X_1.fit_transform(X.iloc[:, 1])
@@ -92,12 +94,14 @@ def runModel2(userData):
     X = X.drop(len(X.index)-1)
     X = X.values
     y = y.values
+    from sklearn.preprocessing import StandardScaler
     sc = StandardScaler()
     sc1 = StandardScaler()
     PredictorScalerFit = sc.fit(X)
     TargetVarScalerFit = sc1.fit(y)
     X = PredictorScalerFit.transform(X)
     y = TargetVarScalerFit.transform(y)
+    from sklearn.model_selection import train_test_split
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=0)
     X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
@@ -125,5 +129,6 @@ def runModel2(userData):
         X_test, y_test), epochs=60, batch_size=1)
     y_pred = model.predict(user_x)
     y_pred = TargetVarScalerFit.inverse_transform(y_pred[0])
-    print(y_pred)
-    return y_pred
+    result = float(y_pred[0])
+    print(result)
+    return result

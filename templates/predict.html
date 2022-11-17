@@ -24,20 +24,30 @@
                            <div style="font-size:25px; text-align:center;">
                               {{ prediction_text }}
                               <br>
-                              <table style="margin-left:auto; margin-right:auto;text-align:center;">
+                              <table
+                                 style="margin-left:auto; margin-right:auto;text-align:center; padding: 10px; border: 1px solid white;">
+                                 <!-- Table headers -->
                                  <th>
                                     <tr style="color: white; ">
                                        <td>CROP</td>
-                                       <td>PREDICTED YIELD</td>
+                                       <td>PREDICTED YIELD for CNN Stacked LSTM</td>
+                                       <td>PREDICTED YIELD for Stacked LSTM CNN</td>
+
                                     </tr>
                                  </th>
+
+                                 <!-- For loop logic of jinja template -->
                                  {%for i in range(0, len)%}
+
+                                 <!-- table rows -->
                                  <tr>
                                     <td>{{cropName[i]}}</td>
-                                    <td>{{cropYield[i][0][0]}}</td>
-
+                                    <td>{{cropYield1[i][0][0]}}</td>
+                                    <td>{{cropYield2[i]}}</td>
                                     {%endfor%}
+
                                  </tr>
+
                               </table>
                            </div>
                         </div>
