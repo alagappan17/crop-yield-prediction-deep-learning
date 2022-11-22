@@ -5,9 +5,12 @@
    <title>BEST CROP</title>
    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
    <link rel="stylesheet" href="/static/css/style.css">
-   <link rel="stylesheet" href="/static/css/responsive.css">
-   <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" </head>
+   <style>
+      td {
+         padding: 15px;
+      }
+   </style>
+</head>
 
 <body class="main-layout">
    <section class="banner_main">
@@ -25,14 +28,14 @@
                               {{ prediction_text }}
                               <br>
                               <table
-                                 style="margin-left:auto; margin-right:auto;text-align:center; padding: 10px; border: 1px solid white;">
+                                 style="margin-left:auto; margin-right:auto;text-align:center; padding: 30px; border: 1px solid white;">
                                  <!-- Table headers -->
                                  <th>
                                     <tr style="color: white; ">
                                        <td>CROP</td>
                                        <td>PREDICTED YIELD by CNN Stacked LSTM</td>
+                                       <td>PREDICTED YIELD by Stacked LSTM CNN</td>
                                        <td>PREDICTED YIELD by CNN Bi LSTM</td>
-
                                     </tr>
                                  </th>
 
@@ -44,6 +47,7 @@
                                     <td>{{cropName[i]}}</td>
                                     <td>{{cropYield1[i][0][0]}}</td>
                                     <td>{{cropYield2[i][0][0]}}</td>
+                                    <td>{{cropYield3[i][0][0]}}</td>
                                     {%endfor%}
 
                                  </tr>
