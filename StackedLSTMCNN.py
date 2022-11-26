@@ -56,7 +56,7 @@ regressor.add(Dense(units=1))
 regressor.compile(loss='mean_squared_error',
                   optimizer='adam', metrics=['mae', 'mse'])
 history = regressor.fit(X_train, y_train, validation_data=(
-    X_test, y_test), epochs=200, batch_size=8)
+    X_test, y_test), epochs=200, batch_size=1)
 pred = regressor.predict(X_test)
 print(pred)
 

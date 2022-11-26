@@ -48,7 +48,7 @@ model.add(Dense(1))
 model.compile(loss='mean_squared_error',
                    optimizer='adam', metrics=['mae', 'mse'])
 history = model.fit(X_train, y_train, validation_data=(
-    X_test, y_test), epochs=200, batch_size=8)
+    X_test, y_test), epochs=200, batch_size=1)
 pred = model.predict(X_test)
 print("y_test: ", y_test)
 print("y_pred", pred)
