@@ -4,9 +4,9 @@ import threading
 from threading import *
 from DataFormatter import convertToInputFormat, convertToOutputFormat
 from keras.models import load_model
+import requests
+import json
 
-
-# import pickle
 
 application = Flask(__name__)
 
@@ -19,7 +19,8 @@ def home():
 @application.route('/predict', methods=['POST'])
 def predict():
 
-    crops = ["Rice", "Sugarcane", "Sunflower", "Minor Pulses", "Groundnut"]
+    crops = ["Rice", "Sugarcane", "Sunflower", "Minor Pulses", "Groundnut",
+             "Cotton", "Sesamum", "Millets", "Pigeon Pea", "Oilseeds"]
     predictedOutput1 = []
     predictedOutput2 = []
     predictedOutput3 = []
@@ -31,8 +32,26 @@ def predict():
 
     userInput = [str(x) for x in request.form.values()]
     userInput.insert(1, "")
+    district = userInput[0]
+
+    current_weather_url = "http://api.weatherapi.com/v1/current.json?key=64867ca3559946fba2094108232803&q=" + district + "&aqi=no"
+    data = requests.get(current_weather_url)
+    decoded = data.content.decode("utf-8")
+    data = json.loads(decoded)
+    print(data)
+    temp = data['current']['temp_c']
+    precipitation = data['current']['precip_mm']
+    pressure = data['current']['pressure_mb']
+    wind = data['current']['wind_kph']
+    userInput.insert(2, temp)
+    userInput.insert(3, precipitation)
+    userInput.insert(4, pressure)
+    userInput.insert(5, wind)
+
+    print(userInput)
 
     # from model import CNNStackedLSTM, StackedLSTMCNN, CNNBiLSTM
+
     global bestCrop, bestYield
     bestYield = -9999999999
     for crop in crops:
@@ -42,21 +61,25 @@ def predict():
         pred1 = CNNStackedLSTM(transformedData)
         pred1 = convertToOutputFormat(userInput, pred1)
         print(pred1)
+        pred1 = np.round(pred1, 2)
         predictedOutput1.append(pred1)
 
         pred2 = StackedLSTMCNN(transformedData)
         pred2 = convertToOutputFormat(userInput, pred2)
         print(pred2)
+        pred2 = np.round(pred2, 2)
         predictedOutput2.append(pred2)
 
         pred3 = CNNBiLSTM(transformedData)
         pred3 = convertToOutputFormat(userInput, pred3)
         print(pred3)
+        pred3 = np.round(pred3, 2)
         predictedOutput3.append(pred3)
 
         pred4 = BiLSTMCNN(transformedData)
         pred4 = convertToOutputFormat(userInput, pred4)
         print(pred4)
+        pred4 = np.round(pred4, 2)
         predictedOutput4.append(pred4)
 
         if (pred1 > bestYield):
@@ -99,7 +122,7 @@ def predict():
 
     text = "The best crop for " + str(userInput[0]) + " District is " + str(
         bestCrop)
-    return render_template("predict.html", prediction_text=text, cropYield1=predictedOutput1, cropYield2=predictedOutput2, cropYield3=predictedOutput3, cropYield4=predictedOutput4,  cropName=crops, len=len(crops))
+    return render_template("predict.html", prediction_text=text, cropYield1=predictedOutput1, cropYield2=predictedOutput2, cropYield3=predictedOutput3, cropYield4=predictedOutput4,  cropName=crops, len=len(crops), factors=userInput)
 
 
 if __name__ == "__main__":

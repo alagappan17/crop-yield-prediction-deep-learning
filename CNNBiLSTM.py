@@ -16,7 +16,7 @@ from tensorflow.keras.layers import Conv1D
 from tensorflow.keras.layers import Flatten
 from tensorflow.keras.layers import Bidirectional
 
-data = pd.read_excel(r'Final_Dataset.xlsx')
+data = pd.read_excel(r'New_Dataset.xlsx')
 predictors = ['District', 'Crop', 'Average_Temperature', 'Precipitation', 'Sea_Level_Pressure', 'Wind', 'Area', 'Nitrogen_Consumption',
               'Nitrogen_Share_in_NPK', 'Phosphate_Consumption', 'Phosphate_Share_in_NPK', 'Potash_Consumption', 'Potash_Share_in_NPK']
 target = ['Yield']
@@ -39,6 +39,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=0)
 X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
 X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
+
 model = Sequential()
 model.add(Conv1D(32, 2, activation="relu",
                  input_shape=(X_train.shape[1], 1)))

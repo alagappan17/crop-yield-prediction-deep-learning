@@ -9,15 +9,23 @@ StackedLSTMCNN = load_model("StackedLSTMCNN.h5")
 CNNBiLSTM = load_model("CNNBiLSTM.h5")
 BiLSTMCNN = load_model("BiLSTMCNN.h5")
 
-# usr_data = ['Chengalpattu', 'Rice', '30.77', '1180', '2.68', '13.35', '3417.77', '43210',
-#             '58.18', '17817', '23.99', '13245', '17.83']
-# actualOutput = 171.96
+usr_data = ['Chengalpattu', 'Rice', '30.77', '1180', '2.68', '13.35', '3417.77', '43210',
+            '58.18', '17817', '23.99', '13245', '17.83']
+actualOutput = 171.96
 
-usr_data = ['Madurai', 'Sugarcane', '31', '1225.9', '3.91', '7.83', '14.81', '63394',
-            '52.57', '26168', '21.7', '31028', '25.73']
-actualOutput = 11975.69
+# usr_data = ['Madurai', 'Sugarcane', '31', '1225.9', '3.91', '7.83', '14.81', '63394',
+#             '52.57', '26168', '21.7', '31028', '25.73']
+# actualOutput = 11975.69
 
-dataMain = pd.read_excel(r'Final_Dataset.xlsx')
+# usr_data = ['Thanjavaur', 'Minor Pulses', '31.1', '1309.3', '2.9', '12.86', '165.6', '45217',
+#             '50.48', '19991', '22.32', '24366', '27.2']
+# actualOutput = 259.15
+
+# usr_data = ['Tiruchirappalli', 'Groundnut', '30.95', '910.9', '2.86', '12.18', '72.27', '47740',
+#             '49.57', '23070', '23.95', '25504', '26.48']
+# actualOutput = 1419.54
+
+dataMain = pd.read_excel(r'New_Dataset.xlsx')
 data = dataMain.loc[(dataMain['District'] == usr_data[0])
                     & (dataMain['Crop'] == usr_data[1])]
 predictors = ['District', 'Crop', 'Average_Temperature', 'Precipitation', 'Sea_Level_Pressure', 'Wind', 'Area', 'Nitrogen_Consumption',

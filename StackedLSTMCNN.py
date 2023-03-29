@@ -16,7 +16,7 @@ from tensorflow.keras.layers import Conv1D
 from tensorflow.keras.layers import Flatten
 from tensorflow.keras.layers import Flatten
 
-data = pd.read_excel(r'Final_Dataset.xlsx')
+data = pd.read_excel(r'New_Dataset.xlsx')
 predictors = ['District', 'Crop', 'Average_Temperature', 'Precipitation', 'Sea_Level_Pressure', 'Wind', 'Area', 'Nitrogen_Consumption',
               'Nitrogen_Share_in_NPK', 'Phosphate_Consumption', 'Phosphate_Share_in_NPK', 'Potash_Consumption', 'Potash_Share_in_NPK']
 target = ['Yield']
